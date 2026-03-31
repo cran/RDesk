@@ -1,0 +1,38 @@
+# R/plots.R.mixed
+# Full dashboard visualizations for RDesk
+
+#' Render the main chart
+make_chart <- function(data) {
+  if (is.null(data) || nrow(data) == 0) return(NULL)
+  
+  p <- ggplot2::ggplot(data, ggplot2::aes(x = wt, y = mpg)) +
+    ggplot2::geom_point(ggplot2::aes(color = as.factor(cyl)), size = 3) +
+    ggplot2::theme_minimal() +
+    ggplot2::labs(
+      title = "MPG vs Weight",
+      x = "Weight",
+      y = "MPG",
+      color = "Cyl"
+    )
+    
+  RDesk::rdesk_plot_to_base64(p)
+}
+
+#' Get dashboard KPIs
+#' @param data Reactive data source
+#' @return List of KPI values
+get_app_kpis <- function(data) {
+  if (is.null(data) || nrow(data) == 0) {
+    return(list(avg_mpg = "0.0", count = "0", avg_hp = "0"))
+  }
+  
+  # Defensive column checks
+  avg_mpg <- if ("mpg" %in% names(data)) format(mean(data$mpg), digits = 1, nsmall = 1) else "N/A"
+  avg_hp  <- if ("hp" %in% names(data)) format(round(mean(data$hp))) else "N/A"
+  
+  list(
+    avg_mpg = avg_mpg,
+    count   = format(nrow(data)),
+    avg_hp  = avg_hp
+  )
+}
