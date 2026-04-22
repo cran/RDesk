@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>AI Coding Assistant</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">AI Coding Assistant</h1>
+
+
+
+<div id="rdesk-ai-skill-file-v1.0.4" class="section level1">
+<h1>RDesk AI Skill File v1.0.4</h1>
+<div id="for-use-with-ai-coding-assistants-working-on-rdesk-applications" class="section level2">
+<h2># For use with AI coding assistants working on RDesk
+applications</h2>
+</div>
+<div id="what-you-are" class="section level2">
+<h2>WHAT YOU ARE</h2>
+<p>You are an expert assistant for the RDesk R package. RDesk builds
+native Windows desktop applications using R for logic and HTML/CSS/JS
+for the interface. You help developers build, debug, migrate, and extend
+RDesk apps.</p>
+<p>Before writing any code, read this entire file. Every section
+contains rules that affect correctness. Violating them produces bugs
+that are hard to diagnose.</p>
+<hr />
+</div>
+<div id="section-1-architecture-overview" class="section level2">
+<h2>SECTION 1 — ARCHITECTURE OVERVIEW</h2>
+<p>RDesk has five layers. Understand all five before touching any
+code.</p>
+<pre><code>Layer 5: App code         (R + HTML/JS — what developers write)
+Layer 4: Plugin API       (async(), rdesk_auto_update(), rdesk_watch())
+Layer 3: R Core API       (App R6 class — app$send, app$on_message)
+Layer 2: IPC bridge       (PostWebMessageAsString + stdin/stdout pipe)
+Layer 1: Native shell     (C++ launcher + WebView2 — never touch this)</code></pre>
+<p>RULE: Developers only write Layer 5. Never suggest modifying Layer 1
+or 2. RULE: Layer 1 C++ is compiled automatically during
+install.packages(). Never suggest manual compilation. RULE:
+Communication between R and JavaScript is always explicit. There is no
+automatic reactivity. The developer must explicitly send and receive
+every message.</p>
+<div id="process-model" class="section level3">
+<h3>Process model</h3>
+<pre><code>[rdesk-launcher.exe]          [R process]
+  WebView2 window    &lt;-IPC-&gt;   App$run() event loop
+  HTML/CSS/JS UI               on_message() handlers
+  rdesk.js bridge              async() workers (mirai/callr)</code></pre>
+<p>The launcher and R are separate OS processes. They communicate via: -
+R to JS: app$send(“type”, payload) -&gt; PostWebMessageAsString - JS to
+R: rdesk.send(“type”, payload) -&gt; stdin JSON pipe</p>
+<p>Zero TCP ports are opened at any point. No httpuv. No WebSocket.</p>
+<hr />
+</div>
+</div>
+<div id="section-2-ipc-contract-never-break-this" class="section level2">
+<h2>SECTION 2 — IPC CONTRACT (NEVER BREAK THIS)</h2>
+<p>Every message has this exact envelope. Both directions. Always.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="dt">&quot;id&quot;</span><span class="fu">:</span>        <span class="st">&quot;msg_abc123&quot;</span><span class="fu">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="dt">&quot;type&quot;</span><span class="fu">:</span>      <span class="st">&quot;action_name&quot;</span><span class="fu">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="dt">&quot;version&quot;</span><span class="fu">:</span>   <span class="st">&quot;1.0&quot;</span><span class="fu">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="dt">&quot;payload&quot;</span><span class="fu">:</span>   <span class="fu">{},</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="fl">1234567890.123</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>RULE: Never construct raw JSON manually. Always use: - R side:
+app$send(“type”, list(…)) or rdesk_message(“type”, list(…)) - JS side:
+rdesk.send(“type”, {…})</p>
+<p>RULE: Handler return values are automatically wrapped in the
+envelope. Return a plain list from on_message() handlers. Never return a
+pre-wrapped envelope.</p>
+<p>RULE: The result of a message of type “foo” arrives in JS as
+“foo_result”.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">// Send from JS</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>rdesk<span class="op">.</span><span class="fu">send</span>(<span class="st">&quot;get_data&quot;</span><span class="op">,</span> { <span class="dt">filter</span><span class="op">:</span> <span class="st">&quot;cyl == 6&quot;</span> })<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">// Receive result in JS  </span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>rdesk<span class="op">.</span><span class="fu">on</span>(<span class="st">&quot;get_data_result&quot;</span><span class="op">,</span> <span class="kw">function</span>(data) {</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="fu">renderTable</span>(data<span class="op">.</span><span class="at">rows</span><span class="op">,</span> data<span class="op">.</span><span class="at">cols</span>)<span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>RULE: System message types start with double underscore:
+<strong>loading</strong>, <strong>progress</strong>,
+<strong>reload_ui</strong>. Never use __ prefix for app messages.</p>
+<hr />
+</div>
+<div id="section-3-app-structure" class="section level2">
+<h2>SECTION 3 — APP STRUCTURE</h2>
+<p>Every RDesk app has this exact structure. Never deviate.</p>
+<pre><code>MyApp/
+├── app.R              &lt;- entry point, keep thin
+├── DESCRIPTION        &lt;- app metadata
+├── R/
+│   ├── server.R       &lt;- on_message() handlers (edit this most)
+│   ├── data.R         &lt;- data loading and transformation
+│   └── plots.R        &lt;- chart rendering helpers
+└── www/
+    ├── index.html     &lt;- UI markup
+    ├── css/
+    │   └── style.css
+    └── js/
+        ├── app.js     &lt;- UI event handling
+        └── rdesk.js   &lt;- IPC bridge (NEVER edit this file)</code></pre>
+<div id="minimal-app.r" class="section level3">
+<h3>Minimal app.R</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>app_dir <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">nzchar</span>(<span class="fu">Sys.getenv</span>(<span class="st">&quot;R_BUNDLE_APP&quot;</span>))) <span class="fu">getwd</span>()</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">dirname</span>(rstudioapi<span class="sc">::</span><span class="fu">getActiveDocumentContext</span>()<span class="sc">$</span>path),</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">error =</span> <span class="cf">function</span>(e) <span class="fu">getwd</span>()</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="fu">library</span>(RDesk)</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="fu">lapply</span>(</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="fu">list.files</span>(<span class="fu">file.path</span>(app_dir, <span class="st">&quot;R&quot;</span>), <span class="at">pattern =</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.R$&quot;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  source</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>)</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>app <span class="ot">&lt;-</span> App<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>  <span class="at">title  =</span> <span class="st">&quot;My App&quot;</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>  <span class="at">width  =</span> <span class="dv">1100</span><span class="dt">L</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>  <span class="at">height =</span> <span class="dv">740</span><span class="dt">L</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>  <span class="at">www    =</span> <span class="fu">file.path</span>(app_dir, <span class="st">&quot;www&quot;</span>)</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>)</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="fu">init_handlers</span>(app)</span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">run</span>()</span></code></pre></div>
+<p>RULE: app.R must stay thin. All handler logic goes in R/server.R.
+RULE: Always source R/ files with lapply + list.files. Never use
+source() on individual files by name — it breaks hot reload. RULE: The
+function init_handlers(app) is the contract between app.R and server.R.
+Always define it in server.R.</p>
+<hr />
+</div>
+</div>
+<div id="section-4-handlers-on_message" class="section level2">
+<h2>SECTION 4 — HANDLERS (on_message)</h2>
+<div id="basic-handler" class="section level3">
+<h3>Basic handler</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># In R/server.R</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>init_handlers <span class="ot">&lt;-</span> <span class="cf">function</span>(app) {</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  app<span class="sc">$</span><span class="fu">on_ready</span>(<span class="cf">function</span>() {</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>    <span class="co"># Runs once when window is ready</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>    <span class="co"># Set menu, send initial data here</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">init_data</span>()</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>    app<span class="sc">$</span><span class="fu">send</span>(<span class="st">&quot;data_ready&quot;</span>, <span class="fu">rdesk_df_to_list</span>(df))</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  })</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;get_data&quot;</span>, <span class="cf">function</span>(payload) {</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">load_data</span>(payload<span class="sc">$</span>filter)</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>    <span class="fu">rdesk_df_to_list</span>(df)</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>  })</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>}</span></code></pre></div>
+<p>RULE: Every handler must return a value or NULL. The return value is
+sent back as type_result. RULE: Never call app<span class="math inline">\(send() inside a plain on_message() handler to
+      return the response. Return the list directly.
+      app\)</span>send() is for pushing unsolicited updates. RULE:
+Payload fields arrive as R list elements: payload$field_name. Never use
+payload[[“field_name”]] — use $ accessor for clarity.</p>
+</div>
+<div id="accessing-payload" class="section level3">
+<h3>Accessing payload</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># JavaScript sends:</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co"># rdesk.send(&quot;filter&quot;, { column: &quot;cyl&quot;, value: 6, ascending: true })</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;filter&quot;</span>, <span class="cf">function</span>(payload) {</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  col  <span class="ot">&lt;-</span> payload<span class="sc">$</span>column     <span class="co"># &quot;cyl&quot;</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  val  <span class="ot">&lt;-</span> payload<span class="sc">$</span>value      <span class="co"># 6</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  asc  <span class="ot">&lt;-</span> payload<span class="sc">$</span>ascending  <span class="co"># TRUE</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  </span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  df <span class="ot">&lt;-</span> mtcars[mtcars[[col]] <span class="sc">==</span> val, ]</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span>asc) df <span class="ot">&lt;-</span> df[<span class="fu">nrow</span>(df)<span class="sc">:</span><span class="dv">1</span>, ]</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>  </span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  <span class="fu">rdesk_df_to_list</span>(df)</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>})</span></code></pre></div>
+</div>
+<div id="on_ready-handler" class="section level3">
+<h3>on_ready handler</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_ready</span>(<span class="cf">function</span>() {</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="co"># Set native menu</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  app<span class="sc">$</span><span class="fu">set_menu</span>(<span class="fu">list</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>    <span class="at">File =</span> <span class="fu">list</span>(</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>      <span class="st">&quot;Open...&quot;</span>  <span class="ot">=</span> <span class="cf">function</span>() app<span class="sc">$</span><span class="fu">send</span>(<span class="st">&quot;open_file&quot;</span>, <span class="fu">list</span>()),</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>      <span class="st">&quot;Save...&quot;</span>  <span class="ot">=</span> <span class="cf">function</span>() app<span class="sc">$</span><span class="fu">send</span>(<span class="st">&quot;save_file&quot;</span>, <span class="fu">list</span>()),</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>      <span class="st">&quot;---&quot;</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>      <span class="st">&quot;Exit&quot;</span>     <span class="ot">=</span> app<span class="sc">$</span>quit</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>    ),</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>    <span class="at">Help =</span> <span class="fu">list</span>(</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>      <span class="st">&quot;About&quot;</span>    <span class="ot">=</span> <span class="cf">function</span>() app<span class="sc">$</span><span class="fu">toast</span>(<span class="st">&quot;MyApp v1.0&quot;</span>, <span class="at">type =</span> <span class="st">&quot;info&quot;</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>    )</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>  ))</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>  </span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>  <span class="co"># Send initial data</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>  app<span class="sc">$</span><span class="fu">send</span>(<span class="st">&quot;init_data&quot;</span>, <span class="fu">list</span>(</span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>    <span class="at">data    =</span> <span class="fu">rdesk_df_to_list</span>(<span class="fu">init_data</span>()),</span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>    <span class="at">version =</span> <span class="st">&quot;1.0.0&quot;</span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a>  ))</span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a>})</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="section-5-async-engine" class="section level2">
+<h2>SECTION 5 — ASYNC ENGINE</h2>
+<p>RDesk has three tiers of async. Use the right one.</p>
+<div id="tier-1-async-wrapper-use-this-for-95-of-cases" class="section level3">
+<h3>Tier 1 — async() wrapper (use this for 95% of cases)</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;heavy_task&quot;</span>, <span class="fu">async</span>(<span class="cf">function</span>(payload) {</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="co"># Runs in background mirai/callr worker</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="co"># UI stays responsive</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="co"># Loading overlay shown automatically</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">slow_computation</span>(payload<span class="sc">$</span>data)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">result =</span> result, <span class="at">n =</span> <span class="fu">length</span>(result))</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>}, <span class="at">app =</span> app, <span class="at">loading_message =</span> <span class="st">&quot;Computing...&quot;</span>))</span></code></pre></div>
+<p>RULE: async() captures the packages loaded at registration time and
+reloads them in the worker. If your handler uses a package, library() it
+before calling async() or add it to DESCRIPTION Imports.</p>
+<p>RULE: Do NOT access app$ methods inside an async() worker. The App
+object lives in the main process. Workers cannot reach it. Return data
+from the worker. app$send() happens automatically.</p>
+<p>RULE: Do NOT use global variables inside async() workers. Pass
+everything via payload or capture in the closure explicitly.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># WRONG - global variable access in worker</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> <span class="fu">load_data</span>()</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;process&quot;</span>, <span class="fu">async</span>(<span class="cf">function</span>(payload) {</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="fu">process</span>(my_data)  <span class="co"># my_data not available in worker</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>}, <span class="at">app =</span> app))</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co"># CORRECT - pass via payload or capture explicitly</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> <span class="fu">load_data</span>()</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;process&quot;</span>, <span class="fu">async</span>(<span class="cf">function</span>(payload) {</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>  <span class="fu">process</span>(payload<span class="sc">$</span>data)  <span class="co"># sent from JS</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>}, <span class="at">app =</span> app))</span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co"># OR - capture explicitly in closure</span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>local_data <span class="ot">&lt;-</span> my_data</span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;process&quot;</span>, <span class="fu">async</span>(<span class="cf">function</span>(payload) {</span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>  <span class="fu">process</span>(local_data)  <span class="co"># captured in closure, serialised to worker</span></span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>}, <span class="at">app =</span> app))</span></code></pre></div>
+</div>
+<div id="tier-2-rdesk_async-explicit-control" class="section level3">
+<h3>Tier 2 — rdesk_async() (explicit control)</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>job_id <span class="ot">&lt;-</span> <span class="fu">rdesk_async</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="at">task     =</span> <span class="cf">function</span>(data) <span class="fu">slow_model</span>(data),</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="at">args     =</span> <span class="fu">list</span>(<span class="at">data =</span> my_data),</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="at">on_done  =</span> <span class="cf">function</span>(result) app<span class="sc">$</span><span class="fu">send</span>(<span class="st">&quot;model_done&quot;</span>, result),</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  <span class="at">on_error =</span> <span class="cf">function</span>(err)    app<span class="sc">$</span><span class="fu">toast</span>(err<span class="sc">$</span>message, <span class="at">type =</span> <span class="st">&quot;error&quot;</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>)</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">loading_start</span>(<span class="st">&quot;Running model...&quot;</span>, <span class="at">cancellable =</span> <span class="cn">TRUE</span>, <span class="at">job_id =</span> job_id)</span></code></pre></div>
+</div>
+<div id="tier-3-mirai-direct-expert-use-only" class="section level3">
+<h3>Tier 3 — mirai direct (expert use only)</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>m <span class="ot">&lt;-</span> mirai<span class="sc">::</span><span class="fu">mirai</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  <span class="fu">slow_fn</span>(x),</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="at">slow_fn =</span> slow_fn,</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="at">x =</span> my_data</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="async_progress-real-time-updates-from-workers" class="section level3">
+<h3>async_progress() — real-time updates from workers</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;long_process&quot;</span>, <span class="fu">async</span>(<span class="cf">function</span>(payload) {</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>  items <span class="ot">&lt;-</span> payload<span class="sc">$</span>items</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(items)) {</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>    <span class="fu">process_item</span>(items[[i]])</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>    <span class="fu">async_progress</span>(</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>      <span class="at">value   =</span> <span class="fu">round</span>(i <span class="sc">/</span> <span class="fu">length</span>(items) <span class="sc">*</span> <span class="dv">100</span>),</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>      <span class="at">message =</span> <span class="fu">paste0</span>(<span class="st">&quot;Processing &quot;</span>, i, <span class="st">&quot; of &quot;</span>, <span class="fu">length</span>(items))</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>    )</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>  }</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">done =</span> <span class="cn">TRUE</span>, <span class="at">processed =</span> <span class="fu">length</span>(items))</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>}, <span class="at">app =</span> app, <span class="at">loading_message =</span> <span class="st">&quot;Starting...&quot;</span>))</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="section-6-javascript-patterns" class="section level2">
+<h2>SECTION 6 — JAVASCRIPT PATTERNS</h2>
+<div id="rdesk.js-api-complete-reference" class="section level3">
+<h3>rdesk.js API — complete reference</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co">// Send message to R, returns Promise</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>rdesk<span class="op">.</span><span class="fu">send</span>(<span class="st">&quot;message_type&quot;</span><span class="op">,</span> { <span class="dt">key</span><span class="op">:</span> <span class="st">&quot;value&quot;</span> })</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(<span class="kw">function</span>(result) { <span class="co">/* handle result */</span> })</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(<span class="kw">function</span>(err)   { <span class="co">/* handle error */</span> })<span class="op">;</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">// Listen for messages pushed from R</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>rdesk<span class="op">.</span><span class="fu">on</span>(<span class="st">&quot;message_type&quot;</span><span class="op">,</span> <span class="kw">function</span>(data) { <span class="co">/* handle */</span> })<span class="op">;</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">// Run code when app is ready</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>rdesk<span class="op">.</span><span class="fu">ready</span>(<span class="kw">function</span>() {</span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>  rdesk<span class="op">.</span><span class="fu">send</span>(<span class="st">&quot;get_initial_data&quot;</span><span class="op">,</span> {})<span class="op">;</span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">// Remove a listener</span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a>rdesk<span class="op">.</span><span class="fu">off</span>(<span class="st">&quot;message_type&quot;</span>)<span class="op">;</span></span></code></pre></div>
+</div>
+<div id="standard-ui-patterns" class="section level3">
+<h3>Standard UI patterns</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co">// Render a base64 chart from R</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>rdesk<span class="op">.</span><span class="fu">on</span>(<span class="st">&quot;chart_result&quot;</span><span class="op">,</span> <span class="kw">function</span>(data) {</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">&quot;chart&quot;</span>)<span class="op">.</span><span class="at">src</span> <span class="op">=</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>    <span class="st">&quot;data:image/png;base64,&quot;</span> <span class="op">+</span> data<span class="op">.</span><span class="at">chart</span><span class="op">;</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co">// Render a table from R</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>rdesk<span class="op">.</span><span class="fu">on</span>(<span class="st">&quot;data_result&quot;</span><span class="op">,</span> <span class="kw">function</span>(data) {</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>  <span class="kw">var</span> head <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">&quot;thead&quot;</span>)<span class="op">;</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>  <span class="kw">var</span> body <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">&quot;tbody&quot;</span>)<span class="op">;</span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>  </span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>  head<span class="op">.</span><span class="at">innerHTML</span> <span class="op">=</span> <span class="st">&quot;&lt;tr&gt;&quot;</span> <span class="op">+</span> </span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>    data<span class="op">.</span><span class="at">cols</span><span class="op">.</span><span class="fu">map</span>(<span class="kw">function</span>(c) { <span class="cf">return</span> <span class="st">&quot;&lt;th&gt;&quot;</span> <span class="op">+</span> c <span class="op">+</span> <span class="st">&quot;&lt;/th&gt;&quot;</span><span class="op">;</span> })<span class="op">.</span><span class="fu">join</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span> </span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>    <span class="st">&quot;&lt;/tr&gt;&quot;</span><span class="op">;</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>    </span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>  body<span class="op">.</span><span class="at">innerHTML</span> <span class="op">=</span> data<span class="op">.</span><span class="at">rows</span><span class="op">.</span><span class="fu">map</span>(<span class="kw">function</span>(row) {</span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">&quot;&lt;tr&gt;&quot;</span> <span class="op">+</span> </span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>      data<span class="op">.</span><span class="at">cols</span><span class="op">.</span><span class="fu">map</span>(<span class="kw">function</span>(c) { </span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">&quot;&lt;td&gt;&quot;</span> <span class="op">+</span> (row[c] <span class="op">!==</span> <span class="kw">undefined</span> <span class="op">?</span> row[c] <span class="op">:</span> <span class="st">&quot;&quot;</span>) <span class="op">+</span> <span class="st">&quot;&lt;/td&gt;&quot;</span><span class="op">;</span> </span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a>      })<span class="op">.</span><span class="fu">join</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span> </span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a>      <span class="st">&quot;&lt;/tr&gt;&quot;</span><span class="op">;</span></span>
+<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a>  })<span class="op">.</span><span class="fu">join</span>(<span class="st">&quot;&quot;</span>)<span class="op">;</span></span>
+<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a></span>
+<span id="cb16-25"><a href="#cb16-25" tabindex="-1"></a><span class="co">// Handle loading state</span></span>
+<span id="cb16-26"><a href="#cb16-26" tabindex="-1"></a>rdesk<span class="op">.</span><span class="fu">on</span>(<span class="st">&quot;__loading__&quot;</span><span class="op">,</span> <span class="kw">function</span>(state) {</span>
+<span id="cb16-27"><a href="#cb16-27" tabindex="-1"></a>  <span class="kw">var</span> overlay <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">&quot;loading-overlay&quot;</span>)<span class="op">;</span></span>
+<span id="cb16-28"><a href="#cb16-28" tabindex="-1"></a>  <span class="cf">if</span> (overlay) overlay<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">display</span> <span class="op">=</span> state<span class="op">.</span><span class="at">active</span> <span class="op">?</span> <span class="st">&quot;flex&quot;</span> <span class="op">:</span> <span class="st">&quot;none&quot;</span><span class="op">;</span></span>
+<span id="cb16-29"><a href="#cb16-29" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb16-30"><a href="#cb16-30" tabindex="-1"></a></span>
+<span id="cb16-31"><a href="#cb16-31" tabindex="-1"></a><span class="co">// Send on button click</span></span>
+<span id="cb16-32"><a href="#cb16-32" tabindex="-1"></a><span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">&quot;btn-refresh&quot;</span>)<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">&quot;click&quot;</span><span class="op">,</span> <span class="kw">function</span>() {</span>
+<span id="cb16-33"><a href="#cb16-33" tabindex="-1"></a>  rdesk<span class="op">.</span><span class="fu">send</span>(<span class="st">&quot;get_data&quot;</span><span class="op">,</span> { <span class="dt">filter</span><span class="op">:</span> <span class="fu">getCurrentFilter</span>() })<span class="op">;</span></span>
+<span id="cb16-34"><a href="#cb16-34" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>RULE: Always use rdesk.ready() to wrap any rdesk.send() calls that
+fire on page load. Without it the IPC bridge may not be initialised
+yet.</p>
+<p>RULE: Never use fetch(), XMLHttpRequest, or WebSocket to communicate
+with R. Only rdesk.send() and rdesk.on().</p>
+<p>RULE: rdesk.js is in www/js/rdesk.js. Never edit it. Never import it
+from a CDN — it must be the local copy.</p>
+<hr />
+</div>
+</div>
+<div id="section-7-charts-and-data" class="section level2">
+<h2>SECTION 7 — CHARTS AND DATA</h2>
+<div id="plot-to-base64" class="section level3">
+<h3>Plot to base64</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># In R/plots.R</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>make_scatter <span class="ot">&lt;-</span> <span class="cf">function</span>(df, <span class="at">x_var =</span> <span class="st">&quot;wt&quot;</span>, <span class="at">y_var =</span> <span class="st">&quot;mpg&quot;</span>) {</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  p <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(df, ggplot2<span class="sc">::</span><span class="fu">aes</span>(.data[[x_var]], .data[[y_var]])) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">colour =</span> <span class="st">&quot;#378ADD&quot;</span>) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>                          <span class="at">colour =</span> <span class="st">&quot;#1D9E75&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>  <span class="fu">rdesk_plot_to_base64</span>(p)</span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># In handler</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;get_chart&quot;</span>, <span class="fu">async</span>(<span class="cf">function</span>(payload) {</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">filter_data</span>(payload)</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">chart =</span> <span class="fu">make_scatter</span>(df, payload<span class="sc">$</span>x_var, payload<span class="sc">$</span>y_var))</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>}, <span class="at">app =</span> app))</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co">// In app.js</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>rdesk<span class="op">.</span><span class="fu">on</span>(<span class="st">&quot;get_chart_result&quot;</span><span class="op">,</span> <span class="kw">function</span>(data) {</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>  <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">&quot;main-chart&quot;</span>)<span class="op">.</span><span class="at">src</span> <span class="op">=</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>    <span class="st">&quot;data:image/png;base64,&quot;</span> <span class="op">+</span> data<span class="op">.</span><span class="at">chart</span><span class="op">;</span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+</div>
+<div id="data-frame-to-list" class="section level3">
+<h3>Data frame to list</h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># rdesk_df_to_list() converts a data frame to JSON-serialisable list</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">rdesk_df_to_list</span>(mtcars)</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co"># result$rows  -&gt; list of row lists</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co"># result$cols  -&gt; character vector of column names</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="co"># In handler</span></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;get_table&quot;</span>, <span class="cf">function</span>(payload) {</span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">filter_data</span>(payload)</span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>  <span class="fu">rdesk_df_to_list</span>(df)</span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a>})</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="section-8-native-features" class="section level2">
+<h2>SECTION 8 — NATIVE FEATURES</h2>
+<div id="file-dialogs" class="section level3">
+<h3>File dialogs</h3>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># Open file</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;open_file&quot;</span>, <span class="cf">function</span>(payload) {</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>  path <span class="ot">&lt;-</span> app<span class="sc">$</span><span class="fu">dialog_open</span>(</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>    <span class="at">title   =</span> <span class="st">&quot;Open Data File&quot;</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>    <span class="at">filters =</span> <span class="st">&quot;CSV files (*.csv)|*.csv|All files (*.*)|*.*&quot;</span></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>  )</span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(path)) <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">cancelled =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>  </span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>  df <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.csv</span>(path, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>  <span class="fu">c</span>(<span class="fu">list</span>(<span class="at">cancelled =</span> <span class="cn">FALSE</span>, <span class="at">filename =</span> <span class="fu">basename</span>(path)),</span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a>    <span class="fu">rdesk_df_to_list</span>(df))</span>
+<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a>})</span>
+<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a><span class="co"># Save file</span></span>
+<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;save_file&quot;</span>, <span class="cf">function</span>(payload) {</span>
+<span id="cb21-16"><a href="#cb21-16" tabindex="-1"></a>  path <span class="ot">&lt;-</span> app<span class="sc">$</span><span class="fu">dialog_save</span>(</span>
+<span id="cb21-17"><a href="#cb21-17" tabindex="-1"></a>    <span class="at">title   =</span> <span class="st">&quot;Save Results&quot;</span>,</span>
+<span id="cb21-18"><a href="#cb21-18" tabindex="-1"></a>    <span class="at">filters =</span> <span class="st">&quot;CSV files (*.csv)|*.csv&quot;</span>,</span>
+<span id="cb21-19"><a href="#cb21-19" tabindex="-1"></a>    <span class="at">default =</span> <span class="st">&quot;results.csv&quot;</span></span>
+<span id="cb21-20"><a href="#cb21-20" tabindex="-1"></a>  )</span>
+<span id="cb21-21"><a href="#cb21-21" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(path)) <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">cancelled =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb21-22"><a href="#cb21-22" tabindex="-1"></a>  </span>
+<span id="cb21-23"><a href="#cb21-23" tabindex="-1"></a>  <span class="fu">write.csv</span>(<span class="fu">reconstruct_df</span>(payload<span class="sc">$</span>data), path, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb21-24"><a href="#cb21-24" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">cancelled =</span> <span class="cn">FALSE</span>, <span class="at">saved_to =</span> <span class="fu">basename</span>(path))</span>
+<span id="cb21-25"><a href="#cb21-25" tabindex="-1"></a>})</span></code></pre></div>
+</div>
+<div id="toasts-and-notifications" class="section level3">
+<h3>Toasts and notifications</h3>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">toast</span>(<span class="st">&quot;Operation complete&quot;</span>, <span class="at">type =</span> <span class="st">&quot;success&quot;</span>)  <span class="co"># green</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">toast</span>(<span class="st">&quot;File not found&quot;</span>,     <span class="at">type =</span> <span class="st">&quot;error&quot;</span>)    <span class="co"># red</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">toast</span>(<span class="st">&quot;Update available&quot;</span>,   <span class="at">type =</span> <span class="st">&quot;info&quot;</span>)     <span class="co"># blue</span></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">toast</span>(<span class="st">&quot;Check your inputs&quot;</span>,  <span class="at">type =</span> <span class="st">&quot;warning&quot;</span>)  <span class="co"># amber</span></span></code></pre></div>
+</div>
+<div id="loading-overlay" class="section level3">
+<h3>Loading overlay</h3>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co"># Manual control (use async() instead when possible)</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">loading_start</span>(<span class="st">&quot;Processing data...&quot;</span>, <span class="at">cancellable =</span> <span class="cn">TRUE</span>, <span class="at">job_id =</span> <span class="st">&quot;job_1&quot;</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">loading_progress</span>(<span class="dv">45</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">loading_progress</span>(<span class="dv">90</span>, <span class="at">message =</span> <span class="st">&quot;Almost done...&quot;</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">loading_done</span>()</span></code></pre></div>
+</div>
+<div id="native-menus" class="section level3">
+<h3>Native menus</h3>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">set_menu</span>(<span class="fu">list</span>(</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>  <span class="at">File =</span> <span class="fu">list</span>(</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>    <span class="st">&quot;New...&quot;</span>     <span class="ot">=</span> <span class="cf">function</span>() app<span class="sc">$</span><span class="fu">send</span>(<span class="st">&quot;new_doc&quot;</span>, <span class="fu">list</span>()),</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>    <span class="st">&quot;Open...&quot;</span>    <span class="ot">=</span> <span class="cf">function</span>() app<span class="sc">$</span><span class="fu">send</span>(<span class="st">&quot;open_file&quot;</span>, <span class="fu">list</span>()),</span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>    <span class="st">&quot;---&quot;</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>    <span class="st">&quot;Exit&quot;</span>       <span class="ot">=</span> app<span class="sc">$</span>quit</span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>  ),</span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>  <span class="at">View =</span> <span class="fu">list</span>(</span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>    <span class="st">&quot;Refresh&quot;</span>    <span class="ot">=</span> <span class="cf">function</span>() app<span class="sc">$</span><span class="fu">send</span>(<span class="st">&quot;refresh&quot;</span>, <span class="fu">list</span>()),</span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>    <span class="st">&quot;Full screen&quot;</span><span class="ot">=</span> <span class="cf">function</span>() app<span class="sc">$</span><span class="fu">maximize</span>()</span>
+<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a>  ),</span>
+<span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a>  <span class="at">Help =</span> <span class="fu">list</span>(</span>
+<span id="cb24-13"><a href="#cb24-13" tabindex="-1"></a>    <span class="st">&quot;Documentation&quot;</span> <span class="ot">=</span> <span class="cf">function</span>() {</span>
+<span id="cb24-14"><a href="#cb24-14" tabindex="-1"></a>      <span class="fu">shell.exec</span>(<span class="st">&quot;https://janakiraman-311.github.io/RDesk/&quot;</span>)</span>
+<span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a>    },</span>
+<span id="cb24-16"><a href="#cb24-16" tabindex="-1"></a>    <span class="st">&quot;About&quot;</span>         <span class="ot">=</span> <span class="cf">function</span>() {</span>
+<span id="cb24-17"><a href="#cb24-17" tabindex="-1"></a>      app<span class="sc">$</span><span class="fu">toast</span>(<span class="st">&quot;MyApp v1.0.0 -- built with RDesk&quot;</span>, <span class="at">type =</span> <span class="st">&quot;info&quot;</span>)</span>
+<span id="cb24-18"><a href="#cb24-18" tabindex="-1"></a>    }</span>
+<span id="cb24-19"><a href="#cb24-19" tabindex="-1"></a>  )</span>
+<span id="cb24-20"><a href="#cb24-20" tabindex="-1"></a>))</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="section-9-build-and-distribution" class="section level2">
+<h2>SECTION 9 — BUILD AND DISTRIBUTION</h2>
+<div id="build-a-distributable" class="section level3">
+<h3>Build a distributable</h3>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>RDesk<span class="sc">::</span><span class="fu">build_app</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>  <span class="at">app_dir         =</span> <span class="st">&quot;path/to/MyApp&quot;</span>,</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  <span class="at">app_name        =</span> <span class="st">&quot;MyApp&quot;</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>  <span class="at">out_dir         =</span> <span class="fu">tempdir</span>(),        <span class="co"># or your dist folder</span></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>  <span class="at">build_installer =</span> <span class="cn">TRUE</span>              <span class="co"># creates .exe installer</span></span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>)</span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a><span class="co"># Output: dist/MyApp-1.0.0-setup.exe (68-200MB depending on packages)</span></span></code></pre></div>
+</div>
+<div id="detect-bundle-vs-development-mode" class="section level3">
+<h3>Detect bundle vs development mode</h3>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">rdesk_is_bundle</span>()) {</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>  <span class="co"># Running as distributed exe</span></span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>  config_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">getwd</span>(), <span class="st">&quot;config.json&quot;</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>  <span class="co"># Running in development via source(&quot;app.R&quot;)</span></span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>  config_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(app_dir, <span class="st">&quot;config.json&quot;</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="auto-update" class="section level3">
+<h3>Auto-update</h3>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co"># In app.R, before app$run()</span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">rdesk_auto_update</span>(</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a>  <span class="at">current_version =</span> <span class="st">&quot;1.0.0&quot;</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a>  <span class="at">version_url     =</span> <span class="st">&quot;https://example.com/myapp/latest.txt&quot;</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a>  <span class="at">download_url    =</span> <span class="st">&quot;https://example.com/myapp/MyApp-setup.exe&quot;</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a>  <span class="at">app             =</span> app</span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a>)</span></code></pre></div>
+<p>Host a plain text file at version_url containing only the version
+string e.g. “1.1.0”. RDesk checks silently on launch and downloads and
+installs the update if a newer version is available.</p>
+<hr />
+</div>
+</div>
+<div id="section-10-shiny-migration-reference" class="section level2">
+<h2>SECTION 10 — SHINY MIGRATION REFERENCE</h2>
+<div id="pattern-mapping" class="section level3">
+<h3>Pattern mapping</h3>
+<table>
+<colgroup>
+<col width="35%" />
+<col width="64%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Shiny pattern</th>
+<th>RDesk equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>input<span class="math inline">\(x               | payload\)</span>x
+inside on_message()</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>reactive({…})</td>
+<td>plain R function called explicitly</td>
+</tr>
+<tr class="odd">
+<td>renderPlot({…})</td>
+<td>rdesk_plot_to_base64() + return list</td>
+</tr>
+<tr class="even">
+<td>renderTable({…})</td>
+<td>rdesk_df_to_list() + return list</td>
+</tr>
+<tr class="odd">
+<td>observe({…})</td>
+<td>app<span class="math inline">\(on_message() handler                |
+| observeEvent(input\)</span>x)</td>
+</tr>
+<tr class="even">
+<td>withProgress()</td>
+<td>async() with loading_message=</td>
+</tr>
+<tr class="odd">
+<td>downloadHandler()</td>
+<td>app<span class="math inline">\(dialog_save() in on_message()       |
+| fileInput()           | app\)</span>dialog_open() in on_message()</td>
+</tr>
+<tr class="even">
+<td>updateSelectInput()</td>
+<td>app<span class="math inline">\(send(&quot;update_select&quot;,
+list(...))    |
+| session\)</span>sendMessage()</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="migration-sequence" class="section level3">
+<h3>Migration sequence</h3>
+<ol style="list-style-type: decimal">
+<li>Copy all pure R functions (data loading, modelling, helpers)
+unchanged</li>
+<li>Map every input$x to a JS rdesk.send(“x_changed”, {value: …})</li>
+<li>Map every render*() to an on_message() that returns the data</li>
+<li>Rewrite ui.R as www/index.html using plain HTML</li>
+<li>Replace renderPlot with rdesk_plot_to_base64() in handlers</li>
+<li>Replace renderTable with rdesk_df_to_list() in handlers</li>
+<li>Replace fileInput/downloadHandler with dialog_open/dialog_save</li>
+<li>Wrap slow handlers in async()</li>
+<li>Add native menu with app$set_menu() in on_ready()</li>
+</ol>
+</div>
+<div id="complete-migration-example" class="section level3">
+<h3>Complete migration example</h3>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="co"># SHINY server.R</span></span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a>  filtered <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a>    mtcars[mtcars<span class="sc">$</span>cyl <span class="sc">==</span> input<span class="sc">$</span>cyl_filter, ]</span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a>  })</span>
+<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a>  output<span class="sc">$</span>scatter <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb28-7"><a href="#cb28-7" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(<span class="fu">filtered</span>(), ggplot2<span class="sc">::</span><span class="fu">aes</span>(wt, mpg)) <span class="sc">+</span></span>
+<span id="cb28-8"><a href="#cb28-8" tabindex="-1"></a>      ggplot2<span class="sc">::</span><span class="fu">geom_point</span>()</span>
+<span id="cb28-9"><a href="#cb28-9" tabindex="-1"></a>  })</span>
+<span id="cb28-10"><a href="#cb28-10" tabindex="-1"></a>  output<span class="sc">$</span>table <span class="ot">&lt;-</span> <span class="fu">renderTable</span>({ <span class="fu">filtered</span>() })</span>
+<span id="cb28-11"><a href="#cb28-11" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># RDESK R/server.R</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>init_handlers <span class="ot">&lt;-</span> <span class="cf">function</span>(app) {</span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a>  app<span class="sc">$</span><span class="fu">on_ready</span>(<span class="cf">function</span>() {</span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a>    app<span class="sc">$</span><span class="fu">send</span>(<span class="st">&quot;data_ready&quot;</span>, <span class="fu">rdesk_df_to_list</span>(mtcars))</span>
+<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a>  })</span>
+<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a>  app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;filter_changed&quot;</span>, <span class="fu">async</span>(<span class="cf">function</span>(payload) {</span>
+<span id="cb29-9"><a href="#cb29-9" tabindex="-1"></a>    df <span class="ot">&lt;-</span> mtcars[mtcars<span class="sc">$</span>cyl <span class="sc">==</span> payload<span class="sc">$</span>cyl_filter, ]</span>
+<span id="cb29-10"><a href="#cb29-10" tabindex="-1"></a>    p  <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(df, ggplot2<span class="sc">::</span><span class="fu">aes</span>(wt, mpg)) <span class="sc">+</span></span>
+<span id="cb29-11"><a href="#cb29-11" tabindex="-1"></a>            ggplot2<span class="sc">::</span><span class="fu">geom_point</span>()</span>
+<span id="cb29-12"><a href="#cb29-12" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb29-13"><a href="#cb29-13" tabindex="-1"></a>      <span class="at">chart =</span> <span class="fu">rdesk_plot_to_base64</span>(p),</span>
+<span id="cb29-14"><a href="#cb29-14" tabindex="-1"></a>      <span class="at">table =</span> <span class="fu">rdesk_df_to_list</span>(df)</span>
+<span id="cb29-15"><a href="#cb29-15" tabindex="-1"></a>    )</span>
+<span id="cb29-16"><a href="#cb29-16" tabindex="-1"></a>  }, <span class="at">app =</span> app))</span>
+<span id="cb29-17"><a href="#cb29-17" tabindex="-1"></a></span>
+<span id="cb29-18"><a href="#cb29-18" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co">// RDESK www/js/app.js</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>rdesk<span class="op">.</span><span class="fu">ready</span>(<span class="kw">function</span>() {</span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>  rdesk<span class="op">.</span><span class="fu">send</span>(<span class="st">&quot;get_data&quot;</span><span class="op">,</span> {})<span class="op">;</span></span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a><span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">&quot;cyl-filter&quot;</span>)<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">&quot;change&quot;</span><span class="op">,</span> <span class="kw">function</span>() {</span>
+<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a>  rdesk<span class="op">.</span><span class="fu">send</span>(<span class="st">&quot;filter_changed&quot;</span><span class="op">,</span> { <span class="dt">cyl_filter</span><span class="op">:</span> <span class="pp">parseInt</span>(<span class="kw">this</span><span class="op">.</span><span class="at">value</span>) })<span class="op">;</span></span>
+<span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a></span>
+<span id="cb30-10"><a href="#cb30-10" tabindex="-1"></a>rdesk<span class="op">.</span><span class="fu">on</span>(<span class="st">&quot;filter_changed_result&quot;</span><span class="op">,</span> <span class="kw">function</span>(data) {</span>
+<span id="cb30-11"><a href="#cb30-11" tabindex="-1"></a>  <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">&quot;chart&quot;</span>)<span class="op">.</span><span class="at">src</span> <span class="op">=</span></span>
+<span id="cb30-12"><a href="#cb30-12" tabindex="-1"></a>    <span class="st">&quot;data:image/png;base64,&quot;</span> <span class="op">+</span> data<span class="op">.</span><span class="at">chart</span><span class="op">;</span></span>
+<span id="cb30-13"><a href="#cb30-13" tabindex="-1"></a>  <span class="fu">renderTable</span>(data<span class="op">.</span><span class="at">table</span><span class="op">.</span><span class="at">rows</span><span class="op">,</span> data<span class="op">.</span><span class="at">table</span><span class="op">.</span><span class="at">cols</span>)<span class="op">;</span></span>
+<span id="cb30-14"><a href="#cb30-14" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="section-11-common-mistakes-and-fixes" class="section level2">
+<h2>SECTION 11 — COMMON MISTAKES AND FIXES</h2>
+<div id="mistake-1-calling-app-inside-async-worker" class="section level3">
+<h3>Mistake 1 — calling app$ inside async() worker</h3>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># WRONG</span></span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;task&quot;</span>, <span class="fu">async</span>(<span class="cf">function</span>(payload) {</span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">compute</span>(payload)</span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a>  app<span class="sc">$</span><span class="fu">toast</span>(<span class="st">&quot;Done!&quot;</span>)      <span class="co"># ERROR: app not available in worker</span></span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a>  app<span class="sc">$</span><span class="fu">send</span>(<span class="st">&quot;done&quot;</span>, result) <span class="co"># ERROR: same reason</span></span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a>}, <span class="at">app =</span> app))</span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a><span class="co"># CORRECT</span></span>
+<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;task&quot;</span>, <span class="fu">async</span>(<span class="cf">function</span>(payload) {</span>
+<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">compute</span>(payload)</span>
+<span id="cb31-11"><a href="#cb31-11" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">result =</span> result)   <span class="co"># return value is sent automatically</span></span>
+<span id="cb31-12"><a href="#cb31-12" tabindex="-1"></a>}, <span class="at">app =</span> app))</span>
+<span id="cb31-13"><a href="#cb31-13" tabindex="-1"></a><span class="co"># toast after completion: use on_done callback in rdesk_async()</span></span></code></pre></div>
+</div>
+<div id="mistake-2-forgetting-flushstdout" class="section level3">
+<h3>Mistake 2 — forgetting flush(stdout())</h3>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co"># WRONG - in bundled mode, messages may buffer</span></span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="fu">cat</span>(jsonlite<span class="sc">::</span><span class="fu">toJSON</span>(msg), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a><span class="co"># CORRECT - always flush after writing to stdout</span></span>
+<span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a><span class="fu">cat</span>(jsonlite<span class="sc">::</span><span class="fu">toJSON</span>(msg), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a><span class="fu">flush</span>(<span class="fu">stdout</span>())</span>
+<span id="cb32-7"><a href="#cb32-7" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" tabindex="-1"></a><span class="co"># Note: app$send() handles this automatically.</span></span>
+<span id="cb32-9"><a href="#cb32-9" tabindex="-1"></a><span class="co"># Only matters if you write raw cat() calls.</span></span></code></pre></div>
+</div>
+<div id="mistake-3-sourcing-individual-r-files-by-name" class="section level3">
+<h3>Mistake 3 — sourcing individual R files by name</h3>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># WRONG - breaks hot reload and is fragile</span></span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;R/server.R&quot;</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;R/data.R&quot;</span>)</span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a><span class="co"># CORRECT - sources all files, order-safe</span></span>
+<span id="cb33-6"><a href="#cb33-6" tabindex="-1"></a><span class="fu">lapply</span>(</span>
+<span id="cb33-7"><a href="#cb33-7" tabindex="-1"></a>  <span class="fu">list.files</span>(<span class="fu">file.path</span>(app_dir, <span class="st">&quot;R&quot;</span>), <span class="at">pattern =</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.R$&quot;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb33-8"><a href="#cb33-8" tabindex="-1"></a>  source</span>
+<span id="cb33-9"><a href="#cb33-9" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="mistake-4-writing-to-getwd-in-examples-or-defaults" class="section level3">
+<h3>Mistake 4 — writing to getwd() in examples or defaults</h3>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="co"># WRONG - CRAN policy violation</span></span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a><span class="fu">build_app</span>(<span class="at">app_dir =</span> <span class="st">&quot;MyApp&quot;</span>, <span class="at">out_dir =</span> <span class="st">&quot;dist&quot;</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a><span class="co"># CORRECT - always write to tempdir() in examples</span></span>
+<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a><span class="fu">build_app</span>(<span class="at">app_dir =</span> <span class="st">&quot;MyApp&quot;</span>, <span class="at">out_dir =</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;dist&quot;</span>))</span></code></pre></div>
+</div>
+<div id="mistake-5-using-installed.packages" class="section level3">
+<h3>Mistake 5 — using installed.packages()</h3>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="co"># WRONG - slow, CRAN policy violation</span></span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a><span class="cf">if</span> (<span class="st">&quot;ggplot2&quot;</span> <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="st">&quot;Package&quot;</span>]) { ... }</span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a><span class="co"># CORRECT</span></span>
+<span id="cb35-5"><a href="#cb35-5" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">&quot;ggplot2&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) { ... }</span></code></pre></div>
+</div>
+<div id="mistake-6-no-on.exit-after-setwd" class="section level3">
+<h3>Mistake 6 — no on.exit() after setwd()</h3>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="co"># WRONG</span></span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a><span class="fu">setwd</span>(build_dir)</span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a><span class="co"># ... do work ...</span></span>
+<span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a><span class="fu">setwd</span>(original_dir)  <span class="co"># never runs if error occurs</span></span>
+<span id="cb36-5"><a href="#cb36-5" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" tabindex="-1"></a><span class="co"># CORRECT</span></span>
+<span id="cb36-7"><a href="#cb36-7" tabindex="-1"></a>oldwd <span class="ot">&lt;-</span> <span class="fu">getwd</span>()</span>
+<span id="cb36-8"><a href="#cb36-8" tabindex="-1"></a><span class="fu">on.exit</span>(<span class="fu">setwd</span>(oldwd), <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb36-9"><a href="#cb36-9" tabindex="-1"></a><span class="fu">setwd</span>(build_dir)</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="section-12-development-workflow" class="section level2">
+<h2>SECTION 12 — DEVELOPMENT WORKFLOW</h2>
+<div id="daily-development-loop" class="section level3">
+<h3>Daily development loop</h3>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="co"># 1. Open project in RStudio</span></span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a><span class="co"># 2. Source the app</span></span>
+<span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;app.R&quot;</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" tabindex="-1"></a><span class="co"># Window opens</span></span>
+<span id="cb37-5"><a href="#cb37-5" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" tabindex="-1"></a><span class="co"># 3. Make changes to R/server.R or www/</span></span>
+<span id="cb37-7"><a href="#cb37-7" tabindex="-1"></a><span class="co"># 4. Close window, re-source</span></span>
+<span id="cb37-8"><a href="#cb37-8" tabindex="-1"></a><span class="co"># With hot reload (Phase 2):</span></span>
+<span id="cb37-9"><a href="#cb37-9" tabindex="-1"></a><span class="co"># rdesk_watch(app)  # auto-reloads on file change</span></span></code></pre></div>
+</div>
+<div id="testing-handlers-without-a-window" class="section level3">
+<h3>Testing handlers without a window</h3>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="co"># Set CI mode to test handlers without launching a window</span></span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a><span class="fu">options</span>(<span class="at">rdesk.ci_mode =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a><span class="fu">library</span>(RDesk)</span>
+<span id="cb38-4"><a href="#cb38-4" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" tabindex="-1"></a><span class="co"># Handlers can be unit tested</span></span>
+<span id="cb38-6"><a href="#cb38-6" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;R/server.R&quot;</span>)</span>
+<span id="cb38-7"><a href="#cb38-7" tabindex="-1"></a><span class="co"># test individual functions from data.R and plots.R directly</span></span></code></pre></div>
+</div>
+<div id="build-verification-before-distribution" class="section level3">
+<h3>Build verification before distribution</h3>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="co"># Always verify before sending to users</span></span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>pkg <span class="ot">&lt;-</span> <span class="fu">build_app</span>(</span>
+<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a>  <span class="at">app_dir  =</span> <span class="st">&quot;MyApp&quot;</span>,</span>
+<span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a>  <span class="at">app_name =</span> <span class="st">&quot;MyApp&quot;</span>,</span>
+<span id="cb39-5"><a href="#cb39-5" tabindex="-1"></a>  <span class="at">out_dir  =</span> <span class="fu">tempdir</span>()</span>
+<span id="cb39-6"><a href="#cb39-6" tabindex="-1"></a>)</span>
+<span id="cb39-7"><a href="#cb39-7" tabindex="-1"></a><span class="co"># Test the output ZIP manually before building installer</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="section-13-quick-reference-card" class="section level2">
+<h2>SECTION 13 — QUICK REFERENCE CARD</h2>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="co"># Create new app</span></span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a>RDesk<span class="sc">::</span><span class="fu">rdesk_create_app</span>(<span class="st">&quot;MyApp&quot;</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a><span class="co"># Core app setup</span></span>
+<span id="cb40-5"><a href="#cb40-5" tabindex="-1"></a>app <span class="ot">&lt;-</span> App<span class="sc">$</span><span class="fu">new</span>(<span class="at">title =</span> <span class="st">&quot;Title&quot;</span>, <span class="at">width =</span> <span class="dv">1100</span><span class="dt">L</span>, <span class="at">height =</span> <span class="dv">740</span><span class="dt">L</span>, <span class="at">www =</span> <span class="st">&quot;www/&quot;</span>)</span>
+<span id="cb40-6"><a href="#cb40-6" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_ready</span>(<span class="cf">function</span>() { ... })</span>
+<span id="cb40-7"><a href="#cb40-7" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;type&quot;</span>, <span class="cf">function</span>(payload) { <span class="fu">list</span>(...) })</span>
+<span id="cb40-8"><a href="#cb40-8" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">run</span>()</span>
+<span id="cb40-9"><a href="#cb40-9" tabindex="-1"></a></span>
+<span id="cb40-10"><a href="#cb40-10" tabindex="-1"></a><span class="co"># Send data to UI</span></span>
+<span id="cb40-11"><a href="#cb40-11" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">send</span>(<span class="st">&quot;type&quot;</span>, <span class="fu">list</span>(<span class="at">key =</span> value))</span>
+<span id="cb40-12"><a href="#cb40-12" tabindex="-1"></a></span>
+<span id="cb40-13"><a href="#cb40-13" tabindex="-1"></a><span class="co"># Async handler</span></span>
+<span id="cb40-14"><a href="#cb40-14" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">on_message</span>(<span class="st">&quot;type&quot;</span>, <span class="fu">async</span>(<span class="cf">function</span>(payload) {</span>
+<span id="cb40-15"><a href="#cb40-15" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">result =</span> <span class="fu">compute</span>(payload))</span>
+<span id="cb40-16"><a href="#cb40-16" tabindex="-1"></a>}, <span class="at">app =</span> app, <span class="at">loading_message =</span> <span class="st">&quot;Working...&quot;</span>))</span>
+<span id="cb40-17"><a href="#cb40-17" tabindex="-1"></a></span>
+<span id="cb40-18"><a href="#cb40-18" tabindex="-1"></a><span class="co"># Chart</span></span>
+<span id="cb40-19"><a href="#cb40-19" tabindex="-1"></a><span class="fu">rdesk_plot_to_base64</span>(ggplot_object)</span>
+<span id="cb40-20"><a href="#cb40-20" tabindex="-1"></a></span>
+<span id="cb40-21"><a href="#cb40-21" tabindex="-1"></a><span class="co"># Table</span></span>
+<span id="cb40-22"><a href="#cb40-22" tabindex="-1"></a><span class="fu">rdesk_df_to_list</span>(data_frame)</span>
+<span id="cb40-23"><a href="#cb40-23" tabindex="-1"></a></span>
+<span id="cb40-24"><a href="#cb40-24" tabindex="-1"></a><span class="co"># IPC message</span></span>
+<span id="cb40-25"><a href="#cb40-25" tabindex="-1"></a><span class="fu">rdesk_message</span>(<span class="st">&quot;type&quot;</span>, <span class="fu">list</span>(<span class="at">key =</span> value))</span>
+<span id="cb40-26"><a href="#cb40-26" tabindex="-1"></a><span class="fu">rdesk_parse_message</span>(json_string)</span>
+<span id="cb40-27"><a href="#cb40-27" tabindex="-1"></a></span>
+<span id="cb40-28"><a href="#cb40-28" tabindex="-1"></a><span class="co"># Dialogs</span></span>
+<span id="cb40-29"><a href="#cb40-29" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">dialog_open</span>(<span class="at">title =</span> <span class="st">&quot;Open&quot;</span>, <span class="at">filters =</span> <span class="st">&quot;CSV|*.csv&quot;</span>)</span>
+<span id="cb40-30"><a href="#cb40-30" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">dialog_save</span>(<span class="at">title =</span> <span class="st">&quot;Save&quot;</span>, <span class="at">filters =</span> <span class="st">&quot;CSV|*.csv&quot;</span>)</span>
+<span id="cb40-31"><a href="#cb40-31" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">dialog_folder</span>(<span class="at">title =</span> <span class="st">&quot;Select folder&quot;</span>)</span>
+<span id="cb40-32"><a href="#cb40-32" tabindex="-1"></a></span>
+<span id="cb40-33"><a href="#cb40-33" tabindex="-1"></a><span class="co"># Notifications</span></span>
+<span id="cb40-34"><a href="#cb40-34" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">toast</span>(<span class="st">&quot;message&quot;</span>, <span class="at">type =</span> <span class="st">&quot;success|error|info|warning&quot;</span>)</span>
+<span id="cb40-35"><a href="#cb40-35" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">notify</span>(<span class="st">&quot;title&quot;</span>, <span class="st">&quot;body&quot;</span>)</span>
+<span id="cb40-36"><a href="#cb40-36" tabindex="-1"></a></span>
+<span id="cb40-37"><a href="#cb40-37" tabindex="-1"></a><span class="co"># Loading</span></span>
+<span id="cb40-38"><a href="#cb40-38" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">loading_start</span>(<span class="st">&quot;message&quot;</span>, <span class="at">cancellable =</span> <span class="cn">TRUE</span>, <span class="at">job_id =</span> <span class="st">&quot;id&quot;</span>)</span>
+<span id="cb40-39"><a href="#cb40-39" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">loading_progress</span>(<span class="dv">50</span>)</span>
+<span id="cb40-40"><a href="#cb40-40" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">loading_done</span>()</span>
+<span id="cb40-41"><a href="#cb40-41" tabindex="-1"></a></span>
+<span id="cb40-42"><a href="#cb40-42" tabindex="-1"></a><span class="co"># Jobs</span></span>
+<span id="cb40-43"><a href="#cb40-43" tabindex="-1"></a><span class="fu">rdesk_async</span>(task, args, on_done, on_error)</span>
+<span id="cb40-44"><a href="#cb40-44" tabindex="-1"></a><span class="fu">rdesk_cancel_job</span>(<span class="st">&quot;job_id&quot;</span>)</span>
+<span id="cb40-45"><a href="#cb40-45" tabindex="-1"></a><span class="fu">rdesk_jobs_pending</span>()</span>
+<span id="cb40-46"><a href="#cb40-46" tabindex="-1"></a></span>
+<span id="cb40-47"><a href="#cb40-47" tabindex="-1"></a><span class="co"># Build</span></span>
+<span id="cb40-48"><a href="#cb40-48" tabindex="-1"></a><span class="fu">build_app</span>(app_dir, app_name, <span class="at">out_dir =</span> <span class="fu">tempdir</span>(), <span class="at">build_installer =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb40-49"><a href="#cb40-49" tabindex="-1"></a></span>
+<span id="cb40-50"><a href="#cb40-50" tabindex="-1"></a><span class="co"># Detect mode</span></span>
+<span id="cb40-51"><a href="#cb40-51" tabindex="-1"></a><span class="fu">rdesk_is_bundle</span>()  <span class="co"># TRUE in distributed app, FALSE in development</span></span>
+<span id="cb40-52"><a href="#cb40-52" tabindex="-1"></a></span>
+<span id="cb40-53"><a href="#cb40-53" tabindex="-1"></a><span class="co"># Updates</span></span>
+<span id="cb40-54"><a href="#cb40-54" tabindex="-1"></a><span class="fu">rdesk_auto_update</span>(current_version, version_url, download_url, app)</span>
+<span id="cb40-55"><a href="#cb40-55" tabindex="-1"></a></span>
+<span id="cb40-56"><a href="#cb40-56" tabindex="-1"></a><span class="co"># JavaScript</span></span>
+<span id="cb40-57"><a href="#cb40-57" tabindex="-1"></a><span class="fu">rdesk.send</span>(<span class="st">&quot;type&quot;</span>, payload)          <span class="co"># returns Promise</span></span>
+<span id="cb40-58"><a href="#cb40-58" tabindex="-1"></a><span class="fu">rdesk.on</span>(<span class="st">&quot;type&quot;</span>, <span class="cf">function</span>(data){})   <span class="co"># listen for messages</span></span>
+<span id="cb40-59"><a href="#cb40-59" tabindex="-1"></a><span class="fu">rdesk.ready</span>(<span class="cf">function</span>(){})            <span class="co"># run when app ready</span></span>
+<span id="cb40-60"><a href="#cb40-60" tabindex="-1"></a><span class="fu">rdesk.off</span>(<span class="st">&quot;type&quot;</span>)                    <span class="co"># remove listener</span></span></code></pre></div>
+<hr />
+</div>
+<div id="section-14-package-information" class="section level2">
+<h2>SECTION 14 — PACKAGE INFORMATION</h2>
+<pre><code>Package:    RDesk
+Version:    1.0.4
+CRAN:       https://cran.r-project.org/package=RDesk
+GitHub:     https://github.com/Janakiraman-311/RDesk
+Docs:       https://janakiraman-311.github.io/RDesk/
+Maintainer: Janakiraman G &lt;janakiraman.bt@gmail.com&gt;
+License:    MIT
+OS:         Windows 10 or later only (v1.0.x)
+Requires:   Rtools44+, WebView2 Runtime
+
+Install:    install.packages(&quot;RDesk&quot;)
+Dev:        devtools::install_github(&quot;Janakiraman-311/RDesk&quot;)</code></pre>
+<hr />
+<p>END OF SKILL FILE</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

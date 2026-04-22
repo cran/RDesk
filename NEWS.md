@@ -1,3 +1,45 @@
+# RDesk 1.0.5 (2026-04-22) — Runtime Fix
+
+## Bug fixes
+
+* `build_app()` now copies the developer's currently running R installation
+  as the app runtime by default (`runtime_dir = NULL`). Previously it
+  downloaded a fixed R 4.4.2 portable build which caused crashes in
+  distributed apps when packages had been compiled for a newer R version
+  (e.g. 4.5.x via `renv`). The version mismatch between the downloaded
+  runtime and the bundled packages produced a cryptic shared-library ABI
+  error on launch.
+
+* Added `rdesk_detect_r_home()` (internal) which resolves the developer's
+  R installation path via `R.home()` with a clear error if it is not found.
+
+* Added `rdesk_copy_r_runtime()` (internal) which selectively copies
+  `bin/`, `library/`, `etc/`, `modules/`, and `include/` from the source
+  R installation into the bundle staging directory.
+
+* The legacy download behaviour is preserved for CI environments or
+  air-gapped scenarios via `runtime_dir = "download"`. A warning is
+  printed advising users to prefer the default to avoid version mismatch.
+
+# RDesk 1.0.4 (2026-04-01) — First CRAN Release 🎉
+
+## CRAN compliance fixes
+
+* Replaced all `\dontrun{}` with `if(interactive()){}` or `\donttest{}` as
+  appropriate. Functions that open native windows are now wrapped in
+  `if(interactive()){}`.
+* Executable R code chunks added to all six vignettes and verified to run
+  cleanly under `R CMD check`.
+* All file-writing operations now default to `tempdir()`. No default paths
+  write to the user's home filespace.
+* `on.exit()` added immediately after every `setwd()` and `options()` call
+  inside `build_app()`.
+* Replaced all `installed.packages()` calls with `requireNamespace()` or
+  `system.file()`.
+* Added copyright holders for all vendored third-party code to `Authors@R`
+  with `cph` roles: Serge Zaitsev (webview.h), Niels Lohmann (nlohmann/json),
+  Microsoft Corporation (WebView2 SDK). Created `inst/COPYRIGHTS`.
+
 # RDesk 1.0.0 (2026-03-22)
 
 ## New features

@@ -1,6 +1,6 @@
 Package: RDesk
 Title: Native Desktop App Framework for 'R'
-Version: 1.0.4
+Version: 1.0.5
 Authors@R: c(
     person("Janakiraman", "G",
            email = "janakiraman.bt@gmail.com",
@@ -43,7 +43,7 @@ Suggests: testthat (>= 3.0.0), withr, fs, knitr, rmarkdown, devtools,
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 NeedsCompilation: yes
-Packaged: 2026-03-27 16:55:56 UTC; Janak
+Packaged: 2026-04-22 09:34:40 UTC; Janak
 Author: Janakiraman G [aut, cre] (ORCID:
     <https://orcid.org/0000-0001-6050-2318>),
   Serge Zaitsev [cph] (Author of webview library (src/webview/webview.h)),
@@ -52,4 +52,4 @@ Author: Janakiraman G [aut, cre] (ORCID:
   Microsoft Corporation [cph] (WebView2 SDK (src/webview2_sdk/))
 Maintainer: Janakiraman G <janakiraman.bt@gmail.com>
 Repository: CRAN
-Date/Publication: 2026-03-31 15:50:02 UTC
+Date/Publication: 2026-04-22 13:00:02 UTC
